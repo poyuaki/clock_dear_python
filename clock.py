@@ -123,7 +123,7 @@ try:
     if temp_second == -1:
       temp_second = now.second
     id_time_color = '#bbbbbb'
-    if now.hour < 6 or now.hour > 17 and False: # もしも夜ならば->ダークモード
+    if now.hour < 6 or now.hour > 17 # もしも夜ならば->ダークモード
       c.configure(bg='#000000')
     else:
       c.configure(bg='#ffffff')
