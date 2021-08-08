@@ -29,6 +29,7 @@ button_text = {
 }
 
 is_audio = True
+is_tikutaku = True
 
 path = os.getcwd()
 
@@ -54,7 +55,7 @@ def change_size(event):
   date_text["width"] = time_text["width"]
   date_text["height"] = time_text["height"] - 70
   button_text["width"] = time_text["width"] / 2
-  button_text["height"] = time_te["height"] - 20
+  button_text["height"] = time_text["height"] - 20
   c.coords(id_time, time_text["width"], time_text["height"]) # テキストの変更
   c.coords(id_date, date_text["width"], date_text["height"]) # テキストの変更
 
@@ -65,6 +66,8 @@ clock_sound = AudioSegment.from_file(path + "/time/clock_oto.mp3", "mp3")
 clock_chunks = split_on_silence(clock_sound, min_silence_len=300, silence_thresh=-40, keep_silence=30)
 for i, clock_chunk in enumerate(clock_chunks):
   clock_chunk.export("./time/clock_sound_without.mp3", format="mp3")
+
+pygame.mixer.init() #初期化
 
 # 音声を生成
 def start_sound(hour):
@@ -85,15 +88,13 @@ def start_sound(hour):
   # 人間味を帯びせるため、少々倍速
   outputWithoutSilence = outputWithoutSilence.speedup(playback_speed=1.2, crossfade=0)
   outputWithoutSilence.export(path + "/time/output.mp3", format="mp3") # 出力
-  pygame.mixer.init() #初期化
-  pygame.mixer.music.load(path + '/time/output.mp3') #読み込み
-  pygame.mixer.music.play()
+  sound_voice = pygame.mixer.Sound(path + '/time/output.mp3') #読み込み
+  sound_voice.play()
 
 # チックタック鳴らすやつ
 def start_clock_sound():
-  pygame.mixer.init() #初期化
-  pygame.mixer.music.load(path + '/time/clock_sound_without.mp3') #読み込み
-  pygame.mixer.music.play()
+  tick_sound = pygame.mixer.Sound(path + '/time/clock_sound_without.mp3') #読み込み
+  tick_sound.play()
 
 def btn_click():
   global is_audio
@@ -103,6 +104,10 @@ def btn_click():
 # 実は、ウインドウを閉じるときどうしてもエラーを出すので、tryで隠します
 
 temp_second = -1
+
+time_temp = 0
+
+temp_temp_time = 0
 
 btn = tkinter.Button(
   root,
@@ -115,6 +120,7 @@ btn = tkinter.Button(
   command = btn_click
 )
 btn.place(x=0,y=0)
+
 try:
   while True:
     now = datetime.now() # 現在時間の取得
@@ -122,8 +128,9 @@ try:
     date_s = '{0:0>4d}/{1:0>2d}/{2:0>2d}'.format(now.year, now.month, now.day)
     if temp_second == -1:
       temp_second = now.second
+      temp_temp_time = now.second
     id_time_color = '#bbbbbb'
-    if now.hour < 6 or now.hour > 17 # もしも夜ならば->ダークモード
+    if now.hour < 6 or now.hour > 17: # もしも夜ならば->ダークモード
       c.configure(bg='#000000')
     else:
       c.configure(bg='#ffffff')
@@ -148,8 +155,10 @@ try:
     time.sleep(0.1)
     c.delete("time_text")
     c.delete("date_text")
-    if now.second == 0 and now.minute == 0 and is_audio:
-      start_sound(now.hour)
+    if now.second == 0 and now.minute == 0 and is_audio and temp_temp_time != now.second:
+      start_sound(time_temp)
+      time_temp += 1
+      temp_temp_time = now.second
     if now.second != temp_second and is_audio:
       start_clock_sound()
       temp_second = now.second
