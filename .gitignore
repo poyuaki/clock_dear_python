@@ -3,3 +3,11 @@ time/
 .DS_Store
 
 nohup.out
+
+build/
+
+__pycache__/
+
+.spec
+
+time/

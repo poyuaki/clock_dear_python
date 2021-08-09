@@ -1,6 +1,46 @@
 # clock_dear_python
 Pythonで作ったデスクトップアプリです。時計アプリです。exeなんて糞食らえ。
 
+## Macユーザへ
+
+今回、macユーザにのみ、このデスクトップアプリを公開することになりました。と言うか、別にwindowsユーザでもアプリを入手することはできるんですが、exeファイルじゃないので動かないかと。
+
+### ダウンロード方法
+
+1. 上部ら辺にある「↓code」のボタンを押し、「Download ZIP」を選択。
+2. ダウンロードしたzipファイルを解凍する。
+3. distフォルダ内の「clock.app」をクリック
+
+### お断り
+
+今回アプリ化するにあたり、pyinstallerを使用しましたが、なぜかpydubが使えず、音声を使用することができませんでした。なので、<b>アプリでは音声がなりません</b>。
+
+ただし、専用のライブラリをインストールすれば、アプリ化しなくても動作するので、一応、音声ありのプログラム(clock_with_sound.py)も提供します。
+
+※ライブラリ等のインストールに関しては以下をご覧ください。
+
+## ライブラリのインストール
+
+### pydubのインストール
+
+```
+pip install pydub
+```
+
+もしも、
+
+```
+RuntimeWarning: Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may not work
+```
+
+と出てきたら、[ffmpeg](https://ffmpeg.zeranoe.com/builds/)よりダウンロードします。
+
+### pygameのインストール
+
+```
+python -m pip install pygame
+```
+
 ## 使用したライブラリ
 
 主なライブラリを紹介
@@ -11,6 +51,8 @@ Pythonで作ったデスクトップアプリです。時計アプリです。ex
 | datetime | 日付・時間を取得 |
 | pydub | mp3ファイルの操作 |
 | pygame | 今回はmp3ファイルの再生に使用 |
+
+※正直、pygameなしでも使えますが、pydubで再生するとちゃんと音が出てくれないので、pygameを使用しています。
 
 ## ファイル構成
 
