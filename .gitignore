@@ -8,6 +8,8 @@ build/
 
 __pycache__/
 
-.spec
+clock.spec
 
 time/
+
+icon.ico
