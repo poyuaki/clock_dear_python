@@ -41,6 +41,10 @@ RuntimeWarning: Couldn't find ffmpeg or avconv - defaulting to ffmpeg, but may n
 python -m pip install pygame
 ```
 
+## 注意！！
+
+macちゃんが「悪質なソフトウェア」とみてるらしく、実行するにはアプリを右クリックし、「開く」を押さないといけない状況ですが、我慢してください...w
+
 ## 使用したライブラリ
 
 主なライブラリを紹介
