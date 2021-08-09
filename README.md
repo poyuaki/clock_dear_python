@@ -9,7 +9,7 @@ Pythonで作ったデスクトップアプリです。時計アプリです。ex
 
 1. 上部ら辺にある「↓code」のボタンを押し、「Download ZIP」を選択。
 2. ダウンロードしたzipファイルを解凍する。
-3. distフォルダ内の「clock.app」をクリック
+3. distフォルダ内の「clock.app.zip」を解凍、clock.appを実行
 
 ### お断り
 
