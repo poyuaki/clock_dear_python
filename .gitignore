@@ -13,3 +13,5 @@ clock.spec
 time/
 
 icon.ico
+
+dist/

@@ -1,8 +1,8 @@
 import tkinter
 from datetime import datetime
 import time
+import pygame.mixer
 import os
-import sys
 
 default_window = {
   "width": 800,
@@ -25,6 +25,8 @@ button_text = {
   "width": 0,
   "height": 0
 }
+
+is_audio = True
 is_tikutaku = True
 
 def resource_path(relative_path):
@@ -35,7 +37,7 @@ def resource_path(relative_path):
 root = tkinter.Tk()
 root.title("Clock")
 root.geometry(str(default_window["width"]) + "x" + str(default_window["height"])) # ウインドウサイズ
-root.minsize(width=370, height=150) # 最小ウインドウサイズ
+root.minsize(width=500, height=174) # 最小ウインドウサイズ
 
 c = tkinter.Canvas( # テキストを描くキャンバスを生成
   root,
@@ -60,13 +62,51 @@ def change_size(event):
 
 root.bind('<Configure>', change_size) # 関数のバインド(連携)
 
+pygame.mixer.init() #初期化
+
+# 音声を生成
+def start_sound(hour):
+  sound_voice = pygame.mixer.Sound(resource_path("time/time_voice_" + str(hour) + ".mp3")) #読み込み
+  sound_voice.play()
+
+# チックタック鳴らすやつ
+def start_clock_sound():
+  tick_sound = pygame.mixer.Sound(resource_path('time/clock_sound.mp3')) #読み込み
+  tick_sound.play()
+
+def btn_click():
+  global is_audio
+  value = is_audio
+  is_audio = not value
+
 # 実は、ウインドウを閉じるときどうしてもエラーを出すので、tryで隠します
+
+temp_second = -1
+
+time_temp = 0
+
+temp_temp_time = 0
+
+btn = tkinter.Button(
+  root,
+  text=' Audio',
+  font = ('DJB Get Digital', 30),
+  width=10,
+  anchor="center",
+  relief=tkinter.RAISED,
+  cursor="hand2",
+  command = btn_click
+)
+btn.place(x=0,y=0)
 
 try:
   while True:
     now = datetime.now() # 現在時間の取得
     time_s = '{0:0>2d}:{1:0>2d}:{2:0>2d}'.format(now.hour, now.minute, now.second)
     date_s = '{0:0>4d}/{1:0>2d}/{2:0>2d}'.format(now.year, now.month, now.day)
+    if temp_second == -1:
+      temp_second = now.second
+      temp_temp_time = now.second
     id_time_color = '#bbbbbb'
     if now.hour < 6 or now.hour > 17: # もしも夜ならば->ダークモード
       c.configure(bg='#000000')
@@ -77,7 +117,7 @@ try:
       time_text["width"],
       time_text["height"],
       text = time_s,
-      font = ('DJB Get Digital', 80),
+      font = ('DJB Get Digital', 100),
       fill = id_time_color,
       tag="time_text"
     )
@@ -93,6 +133,13 @@ try:
     time.sleep(0.1)
     c.delete("time_text")
     c.delete("date_text")
+    if now.second == 0 and now.minute == 0 and is_audio and temp_temp_time != now.second:
+      start_sound(now.hour)
+      time_temp += 1
+      temp_temp_time = now.second
+    elif now.second != temp_second and is_audio:
+      start_clock_sound()
+      temp_second = now.second
   root.mainloop()
 except:
   pass
